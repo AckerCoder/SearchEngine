@@ -4,7 +4,7 @@
 N=${1:-3}
 
 
-# start hadoop master container
+# master container
 sudo docker rm -f hadoop-master &> /dev/null
 echo "start hadoop-master container..."
 sudo docker run -itd \
@@ -13,7 +13,7 @@ sudo docker run -itd \
                 -p 8088:8088 \
                 --name hadoop-master \
                 --hostname hadoop-master \
-                kiwenlau/hadoop:1.0 &> /dev/null
+                mick &> /dev/null
 
 
 # start hadoop slave container
@@ -26,9 +26,10 @@ do
 	                --net=hadoop \
 	                --name hadoop-slave$i \
 	                --hostname hadoop-slave$i \
-	                kiwenlau/hadoop:1.0 &> /dev/null
+	                mick &> /dev/null
 	i=$(( $i + 1 ))
-done 
+done
 
+sudo docker network connect django-crud-live_default hadoop-master
 # get into hadoop master container
 sudo docker exec -it hadoop-master bash
